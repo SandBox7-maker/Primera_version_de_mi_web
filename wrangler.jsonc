@@ -1,0 +1,14 @@
+#Crea un archivo llamado wrangler.jsonc en la raíz del proyecto. Le dice a Cloudflare qué publicar:
+
+{
+// Debe coincidir con el nombre que le darás en Cloudflare
+"name": "mi-web",
+// Pon la fecha de hoy
+"compatibility_date": "2026-10-29",
+"assets": {
+// La carpeta que genera tu build
+"directory": "./dist",
+// Muestra tu página 404.html cuando una dirección no existe
+"not_found_handling": "404-page"
+}
+}
