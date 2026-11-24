@@ -4,16 +4,14 @@
 // Pon la fecha de hoy
 "compatibility_date": "2026-11-24",
 
-"workers_dev" : false,
-"preview_urls" : false,
+"workers_dev" : true,
+"preview_urls" : true,
 
 "assets": {
 // La carpeta que genera tu build
 "directory": "./",
 // Muestra tu página 404.html cuando una dirección no existe
-"not_found_handling": "404-page",
+"not_found_handling": "404-page"
 }
-
-
 
 }
