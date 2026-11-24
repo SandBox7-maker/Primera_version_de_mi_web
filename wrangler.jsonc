@@ -2,7 +2,7 @@
 
 {
 // Debe coincidir con el nombre que le darás en Cloudflare
-"name": "mi-web",
+"name": "primera-version-de-mi-web",
 // Pon la fecha de hoy
 "compatibility_date": "2026-10-29",
 "assets": {
