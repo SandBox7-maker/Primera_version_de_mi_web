@@ -6,7 +6,7 @@
 
 "assets": {
 // La carpeta que genera tu build
-"directory": "public",
+"directory": "/",
 // Muestra tu página 404.html cuando una dirección no existe
 "not_found_handling": "404-page",
 }
