@@ -1,5 +1,3 @@
-#Crea un archivo llamado wrangler.jsonc en la raíz del proyecto. Le dice a Cloudflare qué publicar:
-
 {
 // Debe coincidir con el nombre que le darás en Cloudflare
 "name": "primera-version-de-mi-web",
