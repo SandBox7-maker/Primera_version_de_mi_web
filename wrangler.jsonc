@@ -5,7 +5,7 @@
 "compatibility_date": "2026-11-24",
 "assets": {
 // La carpeta que genera tu build
-#"directory": "./public",
+//"directory": "./public",
 // Muestra tu página 404.html cuando una dirección no existe
 "not_found_handling": "404-page"
 }
