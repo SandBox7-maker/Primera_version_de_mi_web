@@ -4,6 +4,9 @@
 // Pon la fecha de hoy
 "compatibility_date": "2026-11-24",
 
+"workers_dev" : "false",
+"preview_urls" : "false",
+
 "assets": {
 // La carpeta que genera tu build
 "directory": "./",
@@ -11,7 +14,6 @@
 "not_found_handling": "404-page",
 }
 
-"workers_dev" : "false",
-"preview_urls" : "false",
+
 
 }
