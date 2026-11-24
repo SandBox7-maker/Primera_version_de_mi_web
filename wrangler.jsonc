@@ -4,6 +4,8 @@
 // Pon la fecha de hoy
 "compatibility_date": "2026-11-24",
 
+"main": "src/index.ts"
+
 //"assets": {
 // La carpeta que genera tu build
 //"directory": "./public/",
