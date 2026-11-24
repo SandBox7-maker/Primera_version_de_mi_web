@@ -2,7 +2,7 @@
 // Debe coincidir con el nombre que le darás en Cloudflare
 "name": "primera-version-de-mi-web",
 // Pon la fecha de hoy
-"compatibility_date": "2026-10-29",
+"compatibility_date": "2026-11-24",
 "assets": {
 // La carpeta que genera tu build
 "directory": "./dist",
