@@ -1,0 +1,5 @@
+
+# Revisa que tu .gitignore incluya la carpeta de salida ( dist/ ) y node_modules/ . Cloudflare construye la web por su cuenta; no necesitas subir el resultado.
+dist/
+# Ignorar la carpeta de dependencias de Node.js
+node_modules/
