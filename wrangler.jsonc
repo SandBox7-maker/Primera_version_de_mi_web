@@ -9,6 +9,6 @@
 //"directory": "./public/",
 // Muestra tu página 404.html cuando una dirección no existe
 //"not_found_handling": "404-page",
-}
+//}
 
 }
