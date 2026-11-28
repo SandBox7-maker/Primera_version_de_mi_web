@@ -1,0 +1,1501 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUMIC | Improving Your Organization</title>
+    
+    <!-- Google Fonts: Playfair Display (Editorial) + Plus Jakarta Sans (Moderna/Limpia) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS vía CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Configuración personalizada de Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        obsidian: '#0F1115',
+                        charcoal: '#161920',
+                        champagne: '#D4AF37',
+                        champagneLight: '#E8D082',
+                        ivory: '#FAF9F6',
+                        stone: '#9CA3AF'
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'Georgia', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Estilos personalizados para animaciones sutiles y glassmorphism -->
+    <style>
+        body {
+            background-color: #0F1115;
+            color: #FAF9F6;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism avanzado */
+        .glass-nav {
+            background: rgba(15, 17, 21, 0.72);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        /* Animación de entrada al hacer scroll */
+        .reveal {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Scrollbar minimalista */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0F1115;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #272B36;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #D4AF37;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased selection:bg-champagne selection:text-obsidian">
+
+    <!-- ==================== 1. BARRA DE NAVEGACIÓN FIJA ==================== -->
+    <header id="navbar" class="fixed top-0 left-0 right-0 z-50 glass-nav transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 lg:px-10">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo Minimalista -->
+                <a href="#inicio" class="group flex items-center space-x-3 focus:outline-none">
+                    <span class="w-8 h-8 rounded-full border border-champagne/60 flex items-center justify-center transition-transform duration-500 group-hover:rotate-90">
+                        <span class="w-2 h-2 rounded-full bg-champagne"></span>
+                    </span>
+                    <span class="font-serif text-xl tracking-[0.2em] font-medium text-ivory">
+                        CRU<span class="text-champagne font-light">MIC</span>
+                    </span>
+                </a>
+
+                <!-- Enlaces de Navegación (Desktop) -->
+                <nav class="hidden md:flex items-center space-x-8 lg:space-x-10 text-sm tracking-wider uppercase text-stone">
+                    <a href="#propuesta" class="hover:text-ivory transition-colors duration-300">Propuesta</a>
+                    <a href="#enfoque" class="hover:text-ivory transition-colors duration-300">Enfoque</a>
+                    <a href="#servicios" class="hover:text-ivory transition-colors duration-300">Servicios</a>
+                    <a href="#quienes-somos" class="hover:text-ivory transition-colors duration-300">Quiénes somos</a>
+                    <a href="#contacto" class="hover:text-ivory transition-colors duration-300">Contacto</a>
+                </nav>
+
+                <!-- Botón CTA Desktop -->
+                <div class="hidden md:block">
+                    <a href="#contacto" class="inline-flex items-center px-6 py-2.5 rounded-full text-xs uppercase tracking-[0.18em] font-medium border border-champagne/50 text-champagne hover:bg-champagne hover:text-obsidian transition-all duration-300">
+                        Agendar Consulta
+                    </a>
+                </div>
+
+                <!-- Botón Menú Móvil -->
+                <button id="mobile-menu-btn" aria-label="Abrir menú" class="md:hidden p-2 rounded-lg text-ivory hover:text-champagne focus:outline-none">
+                    <svg id="menu-icon-open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 8h16M4 16h16"></path>
+                    </svg>
+                    <svg id="menu-icon-close" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Menú Desplegable Móvil -->
+        <div id="mobile-menu" class="hidden md:hidden bg-charcoal/95 backdrop-blur-xl border-b border-white/10 px-6 pt-4 pb-8 space-y-4">
+            <a href="#propuesta" class="mobile-link block py-2 text-sm uppercase tracking-widest text-stone hover:text-champagne">Propuesta</a>
+            <a href="#enfoque" class="mobile-link block py-2 text-sm uppercase tracking-widest text-stone hover:text-champagne">Enfoque</a>
+            <a href="#servicios" class="mobile-link block py-2 text-sm uppercase tracking-widest text-stone hover:text-champagne">Servicios</a>
+            <a href="#quienes-somos" class="mobile-link block py-2 text-sm uppercase tracking-widest text-stone hover:text-champagne">Quiénes somos</a>
+            <a href="#contacto" class="mobile-link block py-2 text-sm uppercase tracking-widest text-stone hover:text-champagne">Contacto</a>
+            <div class="pt-2">
+                <a href="#contacto" class="mobile-link block text-center w-full py-3 rounded-full text-xs uppercase tracking-widest font-semibold bg-champagne text-obsidian">
+                    Agendar Consulta
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==================== 2. SECCIÓN HERO CON VÍDEO EN BUCLE ==================== -->
+    <section id="inicio" class="relative w-full h-screen min-h-[560px] max-h-[1080px] overflow-hidden bg-obsidian">
+        <!-- Vídeo en bucle a pantalla completa -->
+        <video
+            class="absolute inset-0 w-full h-full object-cover"
+            autoplay
+            loop
+            muted
+            playsinline
+            preload="auto"
+        >
+            <source src="video_1.mp4" type="video/mp4">
+            Tu navegador no soporta la reproducción de vídeo HTML5.
+        </video>
+
+        <!-- Viñeta sutil superior e inferior para integrar el vídeo con la barra y la siguiente sección -->
+        <div class="absolute inset-0 bg-gradient-to-b from-obsidian/55 via-transparent to-obsidian/65 pointer-events-none"></div>
+
+        <!-- Indicador minimalista de scroll en la esquina inferior derecha (no tapa los textos del vídeo) -->
+        <a href="#propuesta" aria-label="Desplazar hacia Propuesta" class="hidden sm:inline-flex items-center gap-2.5 absolute bottom-8 right-8 z-10 px-4 py-2 rounded-full bg-obsidian/55 backdrop-blur-md border border-white/15 text-xs uppercase tracking-[0.2em] text-ivory/90 hover:border-champagne hover:text-champagne transition-all duration-300">
+            <span>Descubrir</span>
+            <svg class="w-3.5 h-3.5 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+        </a>
+    </section>
+
+    <!-- ==================== 3A. SECCIÓN PROPUESTA (INTEGRADA AL SISTEMA EDITORIAL) ==================== -->
+    <section id="propuesta" class="py-24 lg:py-32 bg-obsidian border-t border-white/[0.06] relative overflow-hidden">
+        <!-- Luz ambiental sutil acorde al resto de la web -->
+        <div class="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[640px] h-[300px] bg-champagne/[0.04] blur-[140px] rounded-full pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-6 lg:px-10 relative z-10">
+            
+            <!-- Cabecera de Sección -->
+            <div class="reveal flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+                <div>
+                    <div class="inline-flex items-center gap-2.5 px-3 py-1 rounded-full bg-white/[0.04] border border-white/10 mb-4">
+                        <span class="w-1.5 h-1.5 rounded-full bg-champagne animate-pulse"></span>
+                        <span class="text-[11px] uppercase tracking-[0.25em] text-champagne font-medium">01 / Propuesta</span>
+                    </div>
+                    <h2 class="font-serif text-3xl sm:text-5xl font-normal text-ivory">
+                        Transformamos modelos, <span class="italic font-light text-stone">procesos y talento</span>
+                    </h2>
+                </div>
+                <p class="text-stone font-light max-w-md text-sm sm:text-base leading-relaxed">
+                    Impulsamos el crecimiento de tu organización conectando estrategia, tecnología y personas.
+                </p>
+            </div>
+
+            <!-- Grid de 3 Tarjetas de Propuesta -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-7">
+                
+                <!-- Tarjeta 1: REENFOCAMOS TU NEGOCIO -->
+                <a href="#contacto" data-propuesta-service="Servicios estratégicos y de ecosistema" class="propuesta-card reveal group relative rounded-2xl bg-gradient-to-b from-[#191C23] via-[#14161B] to-[#101216] border border-white/10 hover:border-champagne/55 p-8 flex flex-col justify-between min-h-[520px] transition-all duration-500 hover:-translate-y-1.5 shadow-2xl overflow-hidden">
+                    <!-- Cuadrícula técnica sutil de fondo -->
+                    <div class="absolute inset-0 opacity-[0.035] pointer-events-none" style="background-image: radial-gradient(#D4AF37 1px, transparent 1px); background-size: 22px 22px;"></div>
+                    <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/[0.015] to-champagne/[0.05] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+
+                    <div class="relative z-10">
+                        <div class="flex items-center justify-between mb-6">
+                            <span class="font-mono text-xs tracking-widest text-champagne">01 // ESTRATEGIA</span>
+                            <span class="px-2.5 py-0.5 rounded-full text-[10px] uppercase tracking-widest bg-white/[0.04] text-stone border border-white/10">
+                                Cadena de valor
+                            </span>
+                        </div>
+                        <h3 class="font-sans text-xl sm:text-[22px] font-bold uppercase tracking-wide text-ivory leading-snug group-hover:text-champagneLight transition-colors duration-300">
+                            Reenfocamos tu negocio
+                        </h3>
+                        <p class="text-stone/90 font-light text-sm leading-relaxed mt-4">
+                            Creamos y reformulamos los modelos de negocio para capturar las oportunidades que plantean las nuevas cadenas de valor.
+                        </p>
+                    </div>
+
+                    <!-- Esquema Técnico 1: Arquitectura de Cadena de Valor -->
+                    <div class="my-6 p-4 rounded-xl bg-obsidian/70 border border-white/[0.06] group-hover:border-champagne/25 transition-colors relative z-10">
+                        <svg viewBox="0 0 300 155" class="w-full h-36 overflow-visible">
+                            <!-- Líneas de arquitectura -->
+                            <path d="M150 32 V58 M62 58 H238 M62 58 V76 M150 58 V76 M238 58 V76" stroke="#6B7280" stroke-opacity="0.65" stroke-width="1.2" fill="none"/>
+                            <path d="M62 114 V130 H238 V114" stroke="#D4AF37" stroke-opacity="0.3" stroke-dasharray="3 4" stroke-width="1" fill="none"/>
+
+                            <!-- Nodo Matriz Superior -->
+                            <rect x="96" y="10" width="108" height="24" rx="12" fill="#1C2029" stroke="#D4AF37" stroke-opacity="0.65" stroke-width="1.2"/>
+                            <circle cx="110" cy="22" r="3" fill="#D4AF37"/>
+                            <text x="156" y="25" text-anchor="middle" fill="#FAF9F6" font-size="8.5" font-family="Plus Jakarta Sans, sans-serif" letter-spacing="1.2">MODELO CORE</text>
+
+                            <!-- Nodo Izquierdo -->
+                            <rect x="24" y="76" width="76" height="38" rx="8" fill="#161920" stroke="#FFFFFF" stroke-opacity="0.14" stroke-width="1"/>
+                            <line x1="36" y1="90" x2="68" y2="90" stroke="#B87049" stroke-width="2" stroke-linecap="round"/>
+                            <line x1="36" y1="100" x2="86" y2="100" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/>
+
+                            <!-- Nodo Central Destacado -->
+                            <rect x="112" y="76" width="76" height="38" rx="8" fill="#1E1B18" stroke="#D4AF37" stroke-opacity="0.55" stroke-width="1.2"/>
+                            <line x1="124" y1="90" x2="162" y2="90" stroke="#D4AF37" stroke-width="2" stroke-linecap="round"/>
+                            <line x1="124" y1="100" x2="174" y2="100" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round"/>
+
+                            <!-- Nodo Derecho -->
+                            <rect x="200" y="76" width="76" height="38" rx="8" fill="#161920" stroke="#FFFFFF" stroke-opacity="0.14" stroke-width="1"/>
+                            <line x1="212" y1="90" x2="246" y2="90" stroke="#B87049" stroke-width="2" stroke-linecap="round"/>
+                            <line x1="212" y1="100" x2="262" y2="100" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/>
+
+                            <!-- Indicador inferior de captura de valor -->
+                            <circle cx="150" cy="130" r="3.5" fill="#D4AF37"/>
+                            <text x="150" y="146" text-anchor="middle" fill="#9CA3AF" font-size="8" font-family="monospace" letter-spacing="1.5">NUEVA PROPUESTA DE VALOR</text>
+                        </svg>
+                    </div>
+
+                    <div class="pt-4 border-t border-white/[0.06] flex items-center justify-between text-xs text-stone/80 group-hover:text-champagne transition-colors relative z-10">
+                        <span class="uppercase tracking-widest text-[11px]">Explorar modelo</span>
+                        <svg class="w-4 h-4 transform group-hover:translate-x-1.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                        </svg>
+                    </div>
+                </a>
+
+                <!-- Tarjeta 2: ADAPTAMOS LA ORGANIZACIÓN -->
+                <a href="#contacto" data-propuesta-service="Servicios de continuidad y ejecución" class="propuesta-card reveal group relative rounded-2xl bg-gradient-to-b from-[#211A16] via-[#161518] to-[#101216] border border-amber-500/20 hover:border-champagne/60 p-8 flex flex-col justify-between min-h-[520px] transition-all duration-500 hover:-translate-y-1.5 shadow-2xl overflow-hidden" style="transition-delay: 100ms;">
+                    <div class="absolute inset-0 opacity-[0.035] pointer-events-none" style="background-image: radial-gradient(#D4AF37 1px, transparent 1px); background-size: 22px 22px;"></div>
+                    <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-amber-500/[0.02] to-champagne/[0.06] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+
+                    <div class="relative z-10">
+                        <div class="flex items-center justify-between mb-6">
+                            <span class="font-mono text-xs tracking-widest text-[#E8B878]">02 // OPERATIVA</span>
+                            <span class="px-2.5 py-0.5 rounded-full text-[10px] uppercase tracking-widest bg-amber-500/10 text-[#E8B878] border border-amber-500/25">
+                                Procesos y CX
+                            </span>
+                        </div>
+                        <h3 class="font-sans text-xl sm:text-[22px] font-bold uppercase tracking-wide text-ivory leading-snug group-hover:text-champagneLight transition-colors duration-300">
+                            Adaptamos la organización
+                        </h3>
+                        <p class="text-stone/90 font-light text-sm leading-relaxed mt-4">
+                            Alineamos la tecnología y los procesos del negocio para conseguir una nueva forma de relación con el cliente.
+                        </p>
+                    </div>
+
+                    <!-- Esquema Técnico 2: Sincronización Procesos - Tecnología - Cliente -->
+                    <div class="my-6 p-4 rounded-xl bg-obsidian/70 border border-white/[0.06] group-hover:border-champagne/25 transition-colors relative z-10">
+                        <svg viewBox="0 0 300 155" class="w-full h-36 overflow-visible">
+                            <!-- Flujo horizontal conectado -->
+                            <line x1="48" y1="68" x2="252" y2="68" stroke="#4B5563" stroke-width="1.2" stroke-dasharray="3 3"/>
+                            <path d="M48 68 C 95 34, 125 34, 150 68 C 175 102, 205 102, 252 68" stroke="#D4AF37" stroke-opacity="0.7" stroke-width="1.6" fill="none"/>
+
+                            <!-- Nodo 1: Procesos -->
+                            <g transform="translate(48, 68)">
+                                <circle cx="0" cy="0" r="22" fill="#181B22" stroke="#B87049" stroke-width="1.4"/>
+                                <circle cx="0" cy="0" r="6" fill="#B87049"/>
+                                <text x="0" y="36" text-anchor="middle" fill="#9CA3AF" font-size="8" font-family="monospace" letter-spacing="1">PROCESOS</text>
+                            </g>
+
+                            <!-- Nodo 2: Tecnología (Central) -->
+                            <g transform="translate(150, 68)">
+                                <circle cx="0" cy="0" r="28" fill="#D4AF37" fill-opacity="0.1"/>
+                                <circle cx="0" cy="0" r="21" fill="#1F1B17" stroke="#D4AF37" stroke-width="1.6"/>
+                                <circle cx="0" cy="0" r="7" fill="#D4AF37"/>
+                                <text x="0" y="36" text-anchor="middle" fill="#E8D082" font-size="8" font-family="monospace" letter-spacing="1">TECH CORE</text>
+                            </g>
+
+                            <!-- Nodo 3: Cliente -->
+                            <g transform="translate(252, 68)">
+                                <circle cx="0" cy="0" r="22" fill="#181B22" stroke="#E8D082" stroke-opacity="0.7" stroke-width="1.4"/>
+                                <circle cx="0" cy="0" r="6" fill="#FAF9F6"/>
+                                <text x="0" y="36" text-anchor="middle" fill="#9CA3AF" font-size="8" font-family="monospace" letter-spacing="1">CLIENTE CX</text>
+                            </g>
+
+                            <!-- Barra de estado inferior -->
+                            <rect x="65" y="126" width="170" height="6" rx="3" fill="#1C2029"/>
+                            <rect x="65" y="126" width="128" height="6" rx="3" fill="#D4AF37" fill-opacity="0.75"/>
+                        </svg>
+                    </div>
+
+                    <div class="pt-4 border-t border-white/[0.06] flex items-center justify-between text-xs text-stone/80 group-hover:text-champagne transition-colors relative z-10">
+                        <span class="uppercase tracking-widest text-[11px]">Ver transformación</span>
+                        <svg class="w-4 h-4 transform group-hover:translate-x-1.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                        </svg>
+                    </div>
+                </a>
+
+                <!-- Tarjeta 3: POTENCIAMOS EL COMPROMISO -->
+                <a href="#contacto" data-propuesta-service="Servicios complementarios al talento y la cultura" class="propuesta-card reveal group relative rounded-2xl bg-gradient-to-b from-[#191C23] via-[#14161B] to-[#101216] border border-white/10 hover:border-champagne/55 p-8 flex flex-col justify-between min-h-[520px] transition-all duration-500 hover:-translate-y-1.5 shadow-2xl overflow-hidden" style="transition-delay: 200ms;">
+                    <div class="absolute inset-0 opacity-[0.035] pointer-events-none" style="background-image: radial-gradient(#D4AF37 1px, transparent 1px); background-size: 22px 22px;"></div>
+                    <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/[0.015] to-champagne/[0.05] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+
+                    <div class="relative z-10">
+                        <div class="flex items-center justify-between mb-6">
+                            <span class="font-mono text-xs tracking-widest text-champagne">03 // PERSONAS</span>
+                            <span class="px-2.5 py-0.5 rounded-full text-[10px] uppercase tracking-widest bg-white/[0.04] text-stone border border-white/10">
+                                Talento y cultura
+                            </span>
+                        </div>
+                        <h3 class="font-sans text-xl sm:text-[22px] font-bold uppercase tracking-wide text-ivory leading-snug group-hover:text-champagneLight transition-colors duration-300">
+                            Potenciamos el compromiso
+                        </h3>
+                        <p class="text-stone/90 font-light text-sm leading-relaxed mt-4">
+                            Somos facilitadores del cambio a través de la integración del talento intergeneracional.
+                        </p>
+                    </div>
+
+                    <!-- Esquema Técnico 3: Órbita de Integración Intergeneracional -->
+                    <div class="my-6 p-4 rounded-xl bg-obsidian/70 border border-white/[0.06] group-hover:border-champagne/25 transition-colors relative z-10">
+                        <svg viewBox="0 0 300 155" class="w-full h-36 overflow-visible">
+                            <!-- Órbitas concéntricas -->
+                            <g transform="translate(92, 78)">
+                                <circle cx="0" cy="0" r="52" fill="none" stroke="#4B5563" stroke-opacity="0.55" stroke-dasharray="3 4" stroke-width="1.2"/>
+                                <circle cx="0" cy="0" r="32" fill="none" stroke="#D4AF37" stroke-opacity="0.45" stroke-width="1.2"/>
+                                <circle cx="0" cy="0" r="14" fill="#1C2029" stroke="#D4AF37" stroke-width="1.5"/>
+                                <circle cx="0" cy="0" r="4.5" fill="#D4AF37"/>
+
+                                <!-- Nodos de talento -->
+                                <circle cx="-42" cy="-30" r="6.5" fill="#B87049" stroke="#0F1115" stroke-width="2"/>
+                                <circle cx="46" cy="-22" r="6.5" fill="#D4AF37" stroke="#0F1115" stroke-width="2"/>
+                                <circle cx="14" cy="50" r="6.5" fill="#FAF9F6" stroke="#0F1115" stroke-width="2"/>
+                            </g>
+
+                            <!-- Panel lateral de métricas culturales -->
+                            <g transform="translate(166, 26)">
+                                <rect x="0" y="0" width="114" height="28" rx="8" fill="#161920" stroke="#D4AF37" stroke-opacity="0.4" stroke-width="1"/>
+                                <circle cx="14" cy="14" r="3" fill="#D4AF37"/>
+                                <text x="25" y="17" fill="#FAF9F6" font-size="8.5" font-family="Plus Jakarta Sans, sans-serif">Cultura común</text>
+
+                                <rect x="0" y="38" width="114" height="28" rx="8" fill="#161920" stroke="#FFFFFF" stroke-opacity="0.12" stroke-width="1"/>
+                                <circle cx="14" cy="52" r="3" fill="#B87049"/>
+                                <text x="25" y="55" fill="#D1D5DB" font-size="8.5" font-family="Plus Jakarta Sans, sans-serif">Sinergia senior/jr</text>
+
+                                <rect x="0" y="76" width="114" height="28" rx="8" fill="#161920" stroke="#FFFFFF" stroke-opacity="0.12" stroke-width="1"/>
+                                <circle cx="14" cy="90" r="3" fill="#9CA3AF"/>
+                                <text x="25" y="93" fill="#D1D5DB" font-size="8.5" font-family="Plus Jakarta Sans, sans-serif">Adopción activa</text>
+                            </g>
+                        </svg>
+                    </div>
+
+                    <div class="pt-4 border-t border-white/[0.06] flex items-center justify-between text-xs text-stone/80 group-hover:text-champagne transition-colors relative z-10">
+                        <span class="uppercase tracking-widest text-[11px]">Descubrir cultura</span>
+                        <svg class="w-4 h-4 transform group-hover:translate-x-1.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                        </svg>
+                    </div>
+                </a>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== 3B. SECCIÓN ENFOQUE (GRÁFICA REDISEÑADA + TARJETAS INTERACTIVAS) ==================== -->
+    <section id="enfoque" class="py-24 lg:py-32 bg-[#121316] border-t border-white/[0.06] relative overflow-hidden">
+        <!-- Luz ambiental sutil de fondo -->
+        <div class="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[680px] h-[340px] bg-champagne/[0.04] blur-[130px] rounded-full pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-6 lg:px-10 relative z-10">
+
+            <!-- Cabecera de Sección -->
+            <div class="reveal flex flex-col md:flex-row md:items-end justify-between mb-14 gap-6">
+                <div>
+                    <div class="inline-flex items-center gap-2.5 px-3 py-1 rounded-full bg-white/[0.04] border border-white/10 mb-4">
+                        <span class="w-1.5 h-1.5 rounded-full bg-champagne animate-pulse"></span>
+                        <span class="text-[11px] uppercase tracking-[0.25em] text-champagne font-medium">02 / Enfoque</span>
+                    </div>
+                    <h2 class="font-serif text-3xl sm:text-5xl font-normal text-ivory">
+                        Crecimiento en el tiempo, <span class="italic font-light text-stone">paso a paso</span>
+                    </h2>
+                </div>
+                <p class="text-stone font-light max-w-md text-sm sm:text-base leading-relaxed">
+                    Un recorrido estructurado en cuatro etapas para impulsar la evolución organizativa con claridad, foco y resultados medibles.
+                </p>
+            </div>
+
+            <!-- Gráfica Rediseñada (Crecimiento vs. Tiempo) Integrada e Interactiva -->
+            <div class="reveal mb-10 rounded-3xl bg-gradient-to-br from-[#181A20] via-[#131519] to-[#0E1014] border border-white/[0.08] p-4 sm:p-8 lg:p-10 shadow-[0_25px_70px_rgba(0,0,0,0.55)] overflow-x-auto relative">
+                <svg viewBox="0 0 1200 670" class="w-full min-w-[860px] h-auto select-none" role="img" aria-label="Esquema de crecimiento en el tiempo en 4 etapas">
+                    <defs>
+                        <!-- Gradiente principal de la curva -->
+                        <linearGradient id="enfoqueCurveGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#9A5B38"/>
+                            <stop offset="45%" stop-color="#D97724"/>
+                            <stop offset="100%" stop-color="#D4AF37"/>
+                        </linearGradient>
+
+                        <!-- Área translúcida bajo la curva -->
+                        <linearGradient id="enfoqueAreaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#D4AF37" stop-opacity="0.16"/>
+                            <stop offset="65%" stop-color="#D97724" stop-opacity="0.04"/>
+                            <stop offset="100%" stop-color="#0F1115" stop-opacity="0"/>
+                        </linearGradient>
+
+                        <!-- Resplandor suave de la curva -->
+                        <filter id="curveGlow" x="-10%" y="-10%" width="120%" height="120%">
+                            <feGaussianBlur stdDeviation="4" result="blur"/>
+                            <feMerge>
+                                <feMergeNode in="blur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+
+                        <!-- Patrón de cuadrícula sutil -->
+                        <pattern id="enfoqueGrid" width="48" height="48" patternUnits="userSpaceOnUse">
+                            <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#FFFFFF" stroke-opacity="0.03" stroke-width="1"/>
+                        </pattern>
+                    </defs>
+
+                    <!-- Fondo con cuadrícula técnica dentro del área del gráfico -->
+                    <rect x="84" y="64" width="1060" height="546" rx="16" fill="url(#enfoqueGrid)"/>
+
+                    <!-- Líneas guía horizontales de madurez (25%, 50%, 75%, 100%) -->
+                    <g stroke="#FFFFFF" stroke-opacity="0.05" stroke-dasharray="4 6" stroke-width="1">
+                        <line x1="84" y1="538" x2="1120" y2="538"/>
+                        <line x1="84" y1="368" x2="1120" y2="368"/>
+                        <line x1="84" y1="264" x2="1120" y2="264"/>
+                        <line x1="84" y1="154" x2="1120" y2="154"/>
+                    </g>
+
+                    <!-- Ejes Vertical (CRECIMIENTO) y Horizontal (TIEMPO) -->
+                    <g stroke="#6B7280" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" fill="none">
+                        <!-- Eje Y -->
+                        <line x1="84" y1="610" x2="84" y2="68"/>
+                        <polyline points="77,80 84,66 91,80"/>
+                        <!-- Eje X -->
+                        <line x1="84" y1="610" x2="1136" y2="610"/>
+                        <polyline points="1124,603 1138,610 1124,617"/>
+                    </g>
+
+                    <!-- Etiqueta Vertical CRECIMIENTO -->
+                    <text x="46" y="340" fill="#9CA3AF" font-family="'Plus Jakarta Sans', sans-serif" font-weight="600" font-size="12" letter-spacing="3.5" transform="rotate(-90 46 340)" text-anchor="middle">CRECIMIENTO</text>
+
+                    <!-- Etiqueta Horizontal TIEMPO -->
+                    <text x="1136" y="638" fill="#9CA3AF" font-family="'Plus Jakarta Sans', sans-serif" font-weight="600" font-size="12" letter-spacing="3.5" text-anchor="end">TIEMPO</text>
+
+                    <!-- Área Rellena bajo la Curva -->
+                    <path d="M 84 610 C 165 555, 255 462, 345 372 C 378 338, 422 388, 472 365 C 510 347, 520 278, 540 264 C 562 248, 592 296, 650 282 C 718 265, 765 202, 815 152 L 815 610 Z" fill="url(#enfoqueAreaGrad)"/>
+
+                    <!-- Proyecciones verticales punteadas hacia el eje TIEMPO -->
+                    <g stroke="#D4AF37" stroke-opacity="0.22" stroke-dasharray="3 5" stroke-width="1.2">
+                        <line x1="172" y1="538" x2="172" y2="610"/>
+                        <line x1="350" y1="368" x2="350" y2="610"/>
+                        <line x1="536" y1="264" x2="536" y2="610"/>
+                        <line x1="808" y1="154" x2="808" y2="610"/>
+                    </g>
+
+                    <!-- Curva Escalonada de Crecimiento -->
+                    <path d="M 84 610 C 165 555, 255 462, 345 372 C 378 338, 422 388, 472 365 C 510 347, 520 278, 540 264 C 562 248, 592 296, 650 282 C 718 265, 765 202, 815 152" stroke="url(#enfoqueCurveGrad)" stroke-width="5.5" fill="none" stroke-linecap="round" stroke-linejoin="round" filter="url(#curveGlow)"/>
+
+                    <!-- Conectores hacia cada tarjeta de etapa -->
+                    <g stroke="#D4AF37" stroke-opacity="0.55" stroke-width="1.4" fill="none">
+                        <!-- Paso 1 (arriba) -->
+                        <line x1="172" y1="520" x2="172" y2="312"/>
+                        <circle cx="172" cy="312" r="3" fill="#D4AF37"/>
+
+                        <!-- Paso 2 (abajo derecha) -->
+                        <polyline points="350,386 350,435 468,435"/>
+                        <circle cx="468" cy="435" r="3" fill="#D4AF37"/>
+
+                        <!-- Paso 3 (arriba) -->
+                        <line x1="536" y1="246" x2="536" y2="218"/>
+                        <circle cx="536" cy="218" r="3" fill="#D4AF37"/>
+
+                        <!-- Paso 4 (derecha) -->
+                        <line x1="826" y1="154" x2="862" y2="154"/>
+                        <circle cx="862" cy="154" r="3" fill="#D4AF37"/>
+                    </g>
+
+                    <!-- ==================== TARJETA 1: ANÁLISIS Y DIAGNÓSTICO ==================== -->
+                    <g transform="translate(104, 92)" class="cursor-pointer enfoque-svg-step group" data-step="0">
+                        <rect class="enfoque-svg-box transition-all duration-300" x="0" y="0" width="286" height="220" rx="14" fill="#181B22" fill-opacity="0.92" stroke="#D4AF37" stroke-opacity="0.75" stroke-width="1.2"/>
+                        <rect x="18" y="16" width="64" height="20" rx="10" fill="#B87049" fill-opacity="0.22" stroke="#B87049" stroke-opacity="0.6" stroke-width="0.8"/>
+                        <text x="50" y="29.5" text-anchor="middle" fill="#E8D082" font-family="'Plus Jakarta Sans', sans-serif" font-weight="600" font-size="9.5" letter-spacing="1.5">FASE 01</text>
+
+                        <text x="18" y="60" fill="#FAF9F6" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="16" letter-spacing="0.4">ANÁLISIS Y DIAGNÓSTICO</text>
+                        <line x1="18" y1="72" x2="268" y2="72" stroke="#FFFFFF" stroke-opacity="0.08" stroke-width="1"/>
+
+                        <g fill="#D1D5DB" font-family="'Plus Jakarta Sans', sans-serif" font-size="12.5">
+                            <circle cx="23" cy="92" r="2.5" fill="#D97724"/>
+                            <text x="34" y="96">Identificación de dimensiones</text>
+                            <text x="34" y="113">expuestas al cambio</text>
+
+                            <circle cx="23" cy="133" r="2.5" fill="#D97724"/>
+                            <text x="34" y="137">Análisis de tendencias e</text>
+                            <text x="34" y="154">impacto (future back)</text>
+
+                            <circle cx="23" cy="174" r="2.5" fill="#D97724"/>
+                            <text x="34" y="178">Selección de mejores</text>
+                            <text x="34" y="195">prácticas y benchmarking</text>
+                        </g>
+                    </g>
+
+                    <!-- ==================== TARJETA 2: DEFINICIÓN DE LÍNEAS DE DESARROLLO ==================== -->
+                    <g transform="translate(468, 372)" class="cursor-pointer enfoque-svg-step group" data-step="1">
+                        <rect class="enfoque-svg-box transition-all duration-300" x="0" y="0" width="335" height="222" rx="14" fill="#181B22" fill-opacity="0.92" stroke="#FFFFFF" stroke-opacity="0.14" stroke-width="1.2"/>
+                        <rect x="18" y="16" width="64" height="20" rx="10" fill="#B87049" fill-opacity="0.22" stroke="#B87049" stroke-opacity="0.6" stroke-width="0.8"/>
+                        <text x="50" y="29.5" text-anchor="middle" fill="#E8D082" font-family="'Plus Jakarta Sans', sans-serif" font-weight="600" font-size="9.5" letter-spacing="1.5">FASE 02</text>
+
+                        <text x="18" y="58" fill="#FAF9F6" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="15.5" letter-spacing="0.4">DEFINICIÓN DE LÍNEAS</text>
+                        <text x="18" y="77" fill="#FAF9F6" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="15.5" letter-spacing="0.4">DE DESARROLLO</text>
+                        <line x1="18" y1="88" x2="317" y2="88" stroke="#FFFFFF" stroke-opacity="0.08" stroke-width="1"/>
+
+                        <g fill="#D1D5DB" font-family="'Plus Jakarta Sans', sans-serif" font-size="12.5">
+                            <circle cx="23" cy="107" r="2.5" fill="#D97724"/>
+                            <text x="34" y="111">Transformación y ajustes del modelo</text>
+
+                            <circle cx="23" cy="132" r="2.5" fill="#D97724"/>
+                            <text x="34" y="136">Opciones tecnológicas para procesos</text>
+                            <text x="34" y="152">eficientes</text>
+
+                            <circle cx="23" cy="173" r="2.5" fill="#D97724"/>
+                            <text x="34" y="177">Nueva relación con el cliente</text>
+                            <text x="34" y="194" fill="#9CA3AF">(omnicanalidad y customer journey)</text>
+                        </g>
+                    </g>
+
+                    <!-- ==================== TARJETA 3: DISEÑO DE EQUIPO Y PROCESOS DE TRABAJO ==================== -->
+                    <g transform="translate(422, 42)" class="cursor-pointer enfoque-svg-step group" data-step="2">
+                        <rect class="enfoque-svg-box transition-all duration-300" x="0" y="0" width="310" height="176" rx="14" fill="#181B22" fill-opacity="0.92" stroke="#FFFFFF" stroke-opacity="0.14" stroke-width="1.2"/>
+                        <rect x="18" y="14" width="64" height="20" rx="10" fill="#B87049" fill-opacity="0.22" stroke="#B87049" stroke-opacity="0.6" stroke-width="0.8"/>
+                        <text x="50" y="27.5" text-anchor="middle" fill="#E8D082" font-family="'Plus Jakarta Sans', sans-serif" font-weight="600" font-size="9.5" letter-spacing="1.5">FASE 03</text>
+
+                        <text x="18" y="55" fill="#FAF9F6" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="15" letter-spacing="0.4">DISEÑO DE EQUIPO Y</text>
+                        <text x="18" y="73" fill="#FAF9F6" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="15" letter-spacing="0.4">PROCESOS DE TRABAJO</text>
+                        <line x1="18" y1="84" x2="292" y2="84" stroke="#FFFFFF" stroke-opacity="0.08" stroke-width="1"/>
+
+                        <g fill="#D1D5DB" font-family="'Plus Jakarta Sans', sans-serif" font-size="12.5">
+                            <circle cx="23" cy="103" r="2.5" fill="#D4AF37"/>
+                            <text x="34" y="107">Equipos intergeneracionales para</text>
+                            <text x="34" y="123">talento integral</text>
+
+                            <circle cx="23" cy="144" r="2.5" fill="#D4AF37"/>
+                            <text x="34" y="148">Búsqueda de partners para nueva</text>
+                            <text x="34" y="164">propuesta de valor</text>
+                        </g>
+                    </g>
+
+                    <!-- ==================== TARJETA 4: PILOTO Y PLAN DE IMPLEMENTACIÓN ==================== -->
+                    <g transform="translate(862, 68)" class="cursor-pointer enfoque-svg-step group" data-step="3">
+                        <rect class="enfoque-svg-box transition-all duration-300" x="0" y="0" width="292" height="248" rx="14" fill="#211914" fill-opacity="0.95" stroke="#FFFFFF" stroke-opacity="0.14" stroke-width="1.3"/>
+                        <rect x="18" y="16" width="64" height="20" rx="10" fill="#D4AF37" fill-opacity="0.2" stroke="#D4AF37" stroke-opacity="0.7" stroke-width="0.8"/>
+                        <text x="50" y="29.5" text-anchor="middle" fill="#E8D082" font-family="'Plus Jakarta Sans', sans-serif" font-weight="600" font-size="9.5" letter-spacing="1.5">FASE 04</text>
+
+                        <text x="18" y="60" fill="#FAF9F6" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="16" letter-spacing="0.4">PILOTO Y PLAN DE</text>
+                        <text x="18" y="80" fill="#FAF9F6" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="16" letter-spacing="0.4">IMPLEMENTACIÓN</text>
+                        <line x1="18" y1="92" x2="274" y2="92" stroke="#D4AF37" stroke-opacity="0.22" stroke-width="1"/>
+
+                        <g fill="#E5E7EB" font-family="'Plus Jakarta Sans', sans-serif" font-size="12.5">
+                            <circle cx="23" cy="113" r="2.5" fill="#D4AF37"/>
+                            <text x="34" y="117">Puesta en marcha del piloto</text>
+                            <text x="34" y="134">y quick wins</text>
+
+                            <circle cx="23" cy="156" r="2.5" fill="#D4AF37"/>
+                            <text x="34" y="160">Elementos clave para la</text>
+                            <text x="34" y="177">alineación organizativa</text>
+
+                            <circle cx="23" cy="199" r="2.5" fill="#D4AF37"/>
+                            <text x="34" y="203">Diseño del plan, seguimiento</text>
+                            <text x="34" y="220">y mejora continua</text>
+                        </g>
+                    </g>
+
+                    <!-- ==================== MARCADORES CIRCULARES SOBRE LA CURVA ==================== -->
+                    <g class="cursor-pointer enfoque-svg-step" data-step="0">
+                        <circle cx="172" cy="538" r="24" fill="#D4AF37" fill-opacity="0.14"/>
+                        <circle cx="172" cy="538" r="15" fill="#B87049" stroke="#131519" stroke-width="3" class="enfoque-svg-dot transition-all duration-300"/>
+                        <text x="172" y="543" text-anchor="middle" fill="#0F1115" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="13">1</text>
+                    </g>
+
+                    <g class="cursor-pointer enfoque-svg-step" data-step="1">
+                        <circle cx="350" cy="368" r="24" fill="#D4AF37" fill-opacity="0.14"/>
+                        <circle cx="350" cy="368" r="15" fill="#B87049" stroke="#131519" stroke-width="3" class="enfoque-svg-dot transition-all duration-300"/>
+                        <text x="350" y="373" text-anchor="middle" fill="#0F1115" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="13">2</text>
+                    </g>
+
+                    <g class="cursor-pointer enfoque-svg-step" data-step="2">
+                        <circle cx="536" cy="264" r="24" fill="#D4AF37" fill-opacity="0.14"/>
+                        <circle cx="536" cy="264" r="15" fill="#B87049" stroke="#131519" stroke-width="3" class="enfoque-svg-dot transition-all duration-300"/>
+                        <text x="536" y="269" text-anchor="middle" fill="#0F1115" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="13">3</text>
+                    </g>
+
+                    <g class="cursor-pointer enfoque-svg-step" data-step="3">
+                        <circle cx="808" cy="154" r="24" fill="#D4AF37" fill-opacity="0.18"/>
+                        <circle cx="808" cy="154" r="15" fill="#B87049" stroke="#131519" stroke-width="3" class="enfoque-svg-dot transition-all duration-300"/>
+                        <text x="808" y="159" text-anchor="middle" fill="#0F1115" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="13">4</text>
+                    </g>
+                </svg>
+            </div>
+
+            <!-- Barra Visual de Trayectoria (Selector de Etapas) -->
+            <div class="reveal mb-10 rounded-2xl bg-obsidian/70 border border-white/[0.07] p-5 sm:p-7 backdrop-blur-md">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                    <div class="flex items-center gap-3 text-xs uppercase tracking-[0.2em] text-stone">
+                        <span class="inline-block w-2 h-2 rounded-full bg-[#B87049]"></span>
+                        <span>Desglose por Etapas de Evolución</span>
+                    </div>
+                    <div class="flex items-center gap-4 text-[11px] uppercase tracking-widest text-stone/80">
+                        <span>Selecciona una etapa para destacarla</span>
+                    </div>
+                </div>
+
+                <!-- Navegación Interactiva por Etapas (Pestañas / Peldaños) -->
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3" role="tablist" aria-label="Etapas del enfoque">
+                    <button type="button" data-step="0" class="enfoque-tab group text-left p-3.5 rounded-xl border border-white/10 bg-charcoal/40 hover:border-white/25 transition-all duration-300">
+                        <div class="flex items-center justify-between mb-1.5">
+                            <span class="text-xs font-semibold tracking-widest text-[#D97724]">ETAPA 01</span>
+                            <span class="text-[11px] text-stone group-hover:text-champagne transition-colors">Diagnóstico</span>
+                        </div>
+                        <p class="text-xs sm:text-sm font-medium text-ivory truncate">Análisis y Diagnóstico</p>
+                        <div class="w-full h-1 bg-white/10 rounded-full mt-3 overflow-hidden">
+                            <div class="h-full w-1/4 bg-gradient-to-r from-[#B87049] to-champagne rounded-full"></div>
+                        </div>
+                    </button>
+
+                    <button type="button" data-step="1" class="enfoque-tab group text-left p-3.5 rounded-xl border border-white/10 bg-charcoal/40 hover:border-white/25 transition-all duration-300">
+                        <div class="flex items-center justify-between mb-1.5">
+                            <span class="text-xs font-semibold tracking-widest text-stone group-hover:text-[#D97724] transition-colors">ETAPA 02</span>
+                            <span class="text-[11px] text-stone">Estrategia</span>
+                        </div>
+                        <p class="text-xs sm:text-sm font-medium text-ivory/80 group-hover:text-ivory truncate">Líneas de Desarrollo</p>
+                        <div class="w-full h-1 bg-white/10 rounded-full mt-3 overflow-hidden">
+                            <div class="h-full w-2/4 bg-gradient-to-r from-[#B87049] to-champagne rounded-full"></div>
+                        </div>
+                    </button>
+
+                    <button type="button" data-step="2" class="enfoque-tab group text-left p-3.5 rounded-xl border border-white/10 bg-charcoal/40 hover:border-white/25 transition-all duration-300">
+                        <div class="flex items-center justify-between mb-1.5">
+                            <span class="text-xs font-semibold tracking-widest text-stone group-hover:text-[#D97724] transition-colors">ETAPA 03</span>
+                            <span class="text-[11px] text-stone">Organización</span>
+                        </div>
+                        <p class="text-xs sm:text-sm font-medium text-ivory/80 group-hover:text-ivory truncate">Equipo y Procesos</p>
+                        <div class="w-full h-1 bg-white/10 rounded-full mt-3 overflow-hidden">
+                            <div class="h-full w-3/4 bg-gradient-to-r from-[#B87049] to-champagne rounded-full"></div>
+                        </div>
+                    </button>
+
+                    <button type="button" data-step="3" class="enfoque-tab group text-left p-3.5 rounded-xl border border-white/10 bg-charcoal/40 hover:border-white/25 transition-all duration-300">
+                        <div class="flex items-center justify-between mb-1.5">
+                            <span class="text-xs font-semibold tracking-widest text-stone group-hover:text-[#D97724] transition-colors">ETAPA 04</span>
+                            <span class="text-[11px] text-stone">Impacto</span>
+                        </div>
+                        <p class="text-xs sm:text-sm font-medium text-ivory/80 group-hover:text-ivory truncate">Piloto e Implementación</p>
+                        <div class="w-full h-1 bg-white/10 rounded-full mt-3 overflow-hidden">
+                            <div class="h-full w-full bg-gradient-to-r from-[#B87049] to-champagne rounded-full"></div>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Grid Escalonado de 4 Tarjetas (Efecto Ascendente en Escritorio) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-end">
+
+                <!-- PASO 1 -->
+                <article data-card="0" class="enfoque-card reveal group rounded-2xl bg-gradient-to-b from-[#1E2026] to-[#14161A] border border-white/10 hover:border-champagne/40 p-7 flex flex-col justify-between lg:mb-0 lg:min-h-[330px] transition-all duration-500 shadow-2xl cursor-pointer">
+                    <div>
+                        <div class="flex items-center justify-between mb-6">
+                            <span class="w-10 h-10 rounded-full bg-[#B87049]/20 border border-[#B87049] text-[#E8D082] font-serif text-lg flex items-center justify-center">
+                                01
+                            </span>
+                            <span class="text-[11px] uppercase tracking-[0.2em] text-stone/70">Base</span>
+                        </div>
+                        <h3 class="font-sans text-lg font-bold uppercase tracking-wide text-ivory leading-snug mb-4">
+                            Análisis y Diagnóstico
+                        </h3>
+                        <p class="text-sm text-stone/95 font-light leading-relaxed">
+                            Partimos identificando las dimensiones de la organización más expuestas al cambio y evaluando las tendencias del entorno con una mirada <em class="text-ivory/90">future back</em>. Este diagnóstico se complementa con un ejercicio de <em class="text-ivory/90">benchmarking</em> y selección de mejores prácticas para construir un punto de partida sólido.
+                        </p>
+                    </div>
+                    <div class="pt-6 mt-6 border-t border-white/[0.06] flex items-center justify-between text-xs text-stone">
+                        <span>Nivel de madurez</span>
+                        <span class="text-champagne font-medium">25%</span>
+                    </div>
+                </article>
+
+                <!-- PASO 2 -->
+                <article data-card="1" class="enfoque-card reveal group rounded-2xl bg-gradient-to-b from-[#1E2026] to-[#14161A] border border-white/10 hover:border-champagne/40 p-7 flex flex-col justify-between lg:mb-12 lg:min-h-[340px] transition-all duration-500 shadow-2xl cursor-pointer" style="transition-delay: 80ms;">
+                    <div>
+                        <div class="flex items-center justify-between mb-6">
+                            <span class="w-10 h-10 rounded-full bg-[#B87049]/20 border border-[#B87049] text-[#E8D082] font-serif text-lg flex items-center justify-center">
+                                02
+                            </span>
+                            <span class="text-[11px] uppercase tracking-[0.2em] text-stone/70">Diseño</span>
+                        </div>
+                        <h3 class="font-sans text-lg font-bold uppercase tracking-wide text-ivory leading-snug mb-4">
+                            Definición de Líneas de Desarrollo
+                        </h3>
+                        <p class="text-sm text-stone/95 font-light leading-relaxed">
+                            Trazamos los ajustes necesarios en el modelo de negocio y seleccionamos las soluciones tecnológicas que aportan mayor eficiencia operativa. De forma paralela, rediseñamos el <em class="text-ivory/90">customer journey</em> para articular una relación omnicanal fluida entre los entornos <em class="text-ivory/90">offline</em> y <em class="text-ivory/90">online</em>.
+                        </p>
+                    </div>
+                    <div class="pt-6 mt-6 border-t border-white/[0.06] flex items-center justify-between text-xs text-stone">
+                        <span>Nivel de madurez</span>
+                        <span class="text-champagne font-medium">50%</span>
+                    </div>
+                </article>
+
+                <!-- PASO 3 -->
+                <article data-card="2" class="enfoque-card reveal group rounded-2xl bg-gradient-to-b from-[#1E2026] to-[#14161A] border border-white/10 hover:border-champagne/40 p-7 flex flex-col justify-between lg:mb-24 lg:min-h-[350px] transition-all duration-500 shadow-2xl cursor-pointer" style="transition-delay: 160ms;">
+                    <div>
+                        <div class="flex items-center justify-between mb-6">
+                            <span class="w-10 h-10 rounded-full bg-[#B87049]/20 border border-[#B87049] text-[#E8D082] font-serif text-lg flex items-center justify-center">
+                                03
+                            </span>
+                            <span class="text-[11px] uppercase tracking-[0.2em] text-stone/70">Alineación</span>
+                        </div>
+                        <h3 class="font-sans text-lg font-bold uppercase tracking-wide text-ivory leading-snug mb-4">
+                            Diseño de Equipo y Procesos de Trabajo
+                        </h3>
+                        <p class="text-sm text-stone/95 font-light leading-relaxed">
+                            Configuramos equipos intergeneracionales capaces de integrar experiencia y talento diverso bajo dinámicas de trabajo ágiles, mientras identificamos <em class="text-ivory/90">partners</em> estratégicos que potencien la nueva propuesta de valor.
+                        </p>
+                    </div>
+                    <div class="pt-6 mt-6 border-t border-white/[0.06] flex items-center justify-between text-xs text-stone">
+                        <span>Nivel de madurez</span>
+                        <span class="text-champagne font-medium">75%</span>
+                    </div>
+                </article>
+
+                <!-- PASO 4 -->
+                <article data-card="3" class="enfoque-card reveal group rounded-2xl bg-gradient-to-b from-[#2C1E14] via-[#1C1816] to-[#14161A] border border-amber-500/25 hover:border-champagne/60 p-7 flex flex-col justify-between lg:mb-36 lg:min-h-[360px] transition-all duration-500 shadow-2xl cursor-pointer" style="transition-delay: 240ms;">
+                    <div>
+                        <div class="flex items-center justify-between mb-6">
+                            <span class="w-10 h-10 rounded-full bg-champagne text-obsidian font-serif font-semibold text-lg flex items-center justify-center shadow-lg">
+                                04
+                            </span>
+                            <span class="text-[11px] uppercase tracking-[0.2em] text-champagne">Despliegue</span>
+                        </div>
+                        <h3 class="font-sans text-lg font-bold uppercase tracking-wide text-ivory leading-snug mb-4">
+                            Piloto y Plan de Implementación
+                        </h3>
+                        <p class="text-sm text-ivory/90 font-light leading-relaxed">
+                            Validamos la transformación mediante la puesta en marcha de un proyecto piloto orientado a capturar <em class="text-champagneLight">quick wins</em> tempranos. A partir de ahí, consolidamos los elementos clave de alineación organizativa y estructuramos el plan de despliegue con métricas de seguimiento y mejora continua.
+                        </p>
+                    </div>
+                    <div class="pt-6 mt-6 border-t border-white/10 flex items-center justify-between text-xs text-ivory/80">
+                        <span>Impacto objetivo</span>
+                        <span class="text-champagne font-semibold">100%</span>
+                    </div>
+                </article>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== 4. SERVICIOS (CONSOLA INTERACTIVA DISRUPTIVA) ==================== -->
+    <section id="servicios" class="py-24 lg:py-32 bg-[#0C0D10] border-t border-white/[0.06] relative overflow-hidden">
+        <!-- Resplandores ambientales dinámicos -->
+        <div id="servicios-glow" class="absolute top-1/2 right-1/4 -translate-y-1/2 w-[560px] h-[560px] bg-champagne/[0.06] blur-[150px] rounded-full pointer-events-none transition-colors duration-700"></div>
+
+        <div class="max-w-7xl mx-auto px-6 lg:px-10 relative z-10">
+            
+            <!-- Cabecera Editorial -->
+            <div class="reveal flex flex-col lg:flex-row lg:items-end justify-between mb-16 gap-8">
+                <div class="max-w-2xl">
+                    <div class="inline-flex items-center gap-2.5 px-3 py-1 rounded-full bg-white/[0.04] border border-white/10 mb-4">
+                        <span class="w-1.5 h-1.5 rounded-full bg-champagne animate-pulse"></span>
+                        <span class="text-[11px] uppercase tracking-[0.25em] text-champagne font-medium">03 / Arquitectura de Servicios</span>
+                    </div>
+                    <h2 class="font-serif text-3xl sm:text-5xl lg:text-[52px] font-normal text-ivory leading-[1.12]">
+                        Soluciones que <span class="italic font-light text-stone">orquestan</span> la transformación
+                    </h2>
+                </div>
+                <p class="text-stone font-light max-w-md text-sm sm:text-base leading-relaxed">
+                    Explora nuestras tres dimensiones de intervención. Selecciona un pilar para inspeccionar su impacto operativo, entregables clave y métricas de despliegue.
+                </p>
+            </div>
+
+            <!-- Contenedor Principal Split-Screen (Selector + Escenario Vivo) -->
+            <div class="reveal grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+                
+                <!-- COLUMNA IZQUIERDA: Navegación Táctil de Pilares (5 cols) -->
+                <div class="lg:col-span-5 flex flex-col justify-between gap-4" role="tablist" aria-label="Pilares de Servicios">
+                    
+                    <!-- Pilar 01 -->
+                    <button type="button" data-service-idx="0" class="service-trigger active group text-left relative p-6 sm:p-7 rounded-2xl border border-champagne/60 bg-gradient-to-r from-charcoal to-[#13151A] transition-all duration-500 shadow-xl overflow-hidden">
+                        <div class="service-progress-bar absolute left-0 top-0 bottom-0 w-1 bg-champagne transition-all duration-500"></div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="font-mono text-xs tracking-widest text-champagne">01 // EJECUCIÓN</span>
+                            <span class="text-[11px] uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-champagne/15 text-champagneLight border border-champagne/30">
+                                PMO &amp; CX
+                            </span>
+                        </div>
+                        <h3 class="font-sans text-xl sm:text-2xl font-semibold text-ivory group-hover:text-champagneLight transition-colors">
+                            Servicios de continuidad y ejecución
+                        </h3>
+                        <p class="text-xs sm:text-sm text-stone/90 font-light mt-2 line-clamp-2">
+                            De la estrategia a la operación diaria mediante oficinas de proyecto ágiles, automatización y rediseño del Customer Journey.
+                        </p>
+                    </button>
+
+                    <!-- Pilar 02 -->
+                    <button type="button" data-service-idx="1" class="service-trigger group text-left relative p-6 sm:p-7 rounded-2xl border border-white/10 bg-charcoal/35 hover:bg-charcoal/60 hover:border-white/25 transition-all duration-500 overflow-hidden">
+                        <div class="service-progress-bar absolute left-0 top-0 bottom-0 w-1 bg-transparent transition-all duration-500"></div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="font-mono text-xs tracking-widest text-stone group-hover:text-[#D97724] transition-colors">02 // PERSONAS</span>
+                            <span class="text-[11px] uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-white/[0.05] text-stone border border-white/10">
+                                Cultura &amp; Talento
+                            </span>
+                        </div>
+                        <h3 class="font-sans text-xl sm:text-2xl font-semibold text-ivory/85 group-hover:text-ivory transition-colors">
+                            Servicios complementarios al talento y la cultura
+                        </h3>
+                        <p class="text-xs sm:text-sm text-stone/80 font-light mt-2 line-clamp-2">
+                            Activamos el relevo generacional, el liderazgo transversal y programas de upskilling alineados con la nueva visión.
+                        </p>
+                    </button>
+
+                    <!-- Pilar 03 -->
+                    <button type="button" data-service-idx="2" class="service-trigger group text-left relative p-6 sm:p-7 rounded-2xl border border-white/10 bg-charcoal/35 hover:bg-charcoal/60 hover:border-white/25 transition-all duration-500 overflow-hidden">
+                        <div class="service-progress-bar absolute left-0 top-0 bottom-0 w-1 bg-transparent transition-all duration-500"></div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="font-mono text-xs tracking-widest text-stone group-hover:text-champagne transition-colors">03 // ECOSISTEMA</span>
+                            <span class="text-[11px] uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-white/[0.05] text-stone border border-white/10">
+                                Innovación &amp; Valor
+                            </span>
+                        </div>
+                        <h3 class="font-sans text-xl sm:text-2xl font-semibold text-ivory/85 group-hover:text-ivory transition-colors">
+                            Servicios estratégicos y de ecosistema
+                        </h3>
+                        <p class="text-xs sm:text-sm text-stone/80 font-light mt-2 line-clamp-2">
+                            Reconfiguramos tu posición en la cadena de valor mediante alianzas estratégicas e innovación abierta.
+                        </p>
+                    </button>
+
+                </div>
+
+                <!-- COLUMNA DERECHA: Escenario Interactivo / Blueprint en Vivo (7 cols) -->
+                <div class="lg:col-span-7 relative rounded-3xl bg-gradient-to-br from-[#191C23] via-[#13151A] to-[#0E1014] border border-white/12 p-7 sm:p-10 lg:p-12 shadow-[0_25px_70px_rgba(0,0,0,0.65)] flex flex-col justify-between overflow-hidden">
+                    
+                    <!-- Cuadrícula técnica sutil de fondo -->
+                    <div class="absolute inset-0 opacity-[0.04] pointer-events-none" style="background-image: radial-gradient(#D4AF37 1px, transparent 1px); background-size: 24px 24px;"></div>
+
+                    <!-- PANEL 01: CONTINUIDAD Y EJECUCIÓN -->
+                    <div data-service-panel="0" class="service-panel relative z-10 flex flex-col justify-between h-full transition-all duration-500">
+                        <div>
+                            <div class="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-white/10">
+                                <div>
+                                    <span class="text-[11px] font-mono uppercase tracking-[0.2em] text-champagne">Blueprint 01 · Impacto Operativo</span>
+                                    <h4 class="font-serif text-2xl sm:text-3xl text-ivory mt-1">Continuidad y Ejecución</h4>
+                                </div>
+                                <div class="px-3.5 py-1.5 rounded-xl bg-obsidian/80 border border-champagne/30 text-right">
+                                    <span class="block text-[10px] uppercase tracking-widest text-stone">Eficiencia PMO</span>
+                                    <span class="font-mono text-lg font-bold text-champagne">95% <span class="text-xs font-normal text-ivory/70">on-track</span></span>
+                                </div>
+                            </div>
+
+                            <!-- Visualización SVG Interactiva -->
+                            <div class="my-7 p-5 rounded-2xl bg-obsidian/70 border border-white/[0.07]">
+                                <svg viewBox="0 0 460 150" class="w-full h-36 overflow-visible">
+                                    <!-- Barras comparativas -->
+                                    <g transform="translate(10, 15)">
+                                        <text x="0" y="10" fill="#9CA3AF" font-size="9" font-family="Plus Jakarta Sans, sans-serif" letter-spacing="1.5">VELOCIDAD DE DESPLIEGUE</text>
+                                        <rect x="0" y="34" width="10" height="76" rx="2" fill="#374151"/>
+                                        <rect x="14" y="54" width="10" height="56" rx="2" fill="#D97724"/>
+                                        <rect x="34" y="22" width="10" height="88" rx="2" fill="#374151"/>
+                                        <rect x="48" y="36" width="10" height="74" rx="2" fill="#D97724"/>
+                                        <rect x="68" y="42" width="10" height="68" rx="2" fill="#374151"/>
+                                        <rect x="82" y="18" width="10" height="92" rx="2" fill="#D4AF37"/>
+                                        <rect x="102" y="30" width="10" height="80" rx="2" fill="#374151"/>
+                                        <rect x="116" y="12" width="10" height="98" rx="2" fill="#D4AF37"/>
+                                        <line x1="-4" y1="112" x2="136" y2="112" stroke="#4B5563" stroke-width="1"/>
+                                    </g>
+
+                                    <!-- Tarjeta flotante de estado PMO -->
+                                    <g transform="translate(175, 18)">
+                                        <rect x="0" y="0" width="270" height="108" rx="12" fill="#1C2029" stroke="#D4AF37" stroke-opacity="0.45" stroke-width="1.2"/>
+                                        <circle cx="18" cy="18" r="4" fill="#D4AF37"/>
+                                        <circle cx="31" cy="18" r="4" fill="#D97724"/>
+                                        <circle cx="44" cy="18" r="4" fill="#4B5563"/>
+                                        <text x="252" y="21" text-anchor="end" fill="#9CA3AF" font-size="9" font-family="monospace">LIVE_PIPELINE v2.6</text>
+
+                                        <text x="18" y="48" fill="#FAF9F6" font-size="12" font-weight="600" font-family="Plus Jakarta Sans, sans-serif">Automatización &amp; Customer Journey</text>
+                                        <text x="18" y="65" fill="#9CA3AF" font-size="10" font-family="Plus Jakarta Sans, sans-serif">Hitos críticos completados sin fricción operativa</text>
+
+                                        <!-- Barra de progreso -->
+                                        <rect x="18" y="80" width="234" height="10" rx="5" fill="#0F1115"/>
+                                        <rect x="18" y="80" width="222" height="10" rx="5" fill="url(#goldGrad)"/>
+                                    </g>
+                                    <defs>
+                                        <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                            <stop offset="0%" stop-color="#D97724"/>
+                                            <stop offset="100%" stop-color="#D4AF37"/>
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+                            </div>
+
+                            <!-- Capacidades desglosadas -->
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                                <div class="p-4 rounded-xl bg-white/[0.03] border border-white/[0.07]">
+                                    <span class="text-champagne font-mono text-xs">01.A</span>
+                                    <p class="text-ivory text-sm font-medium mt-1">Gestión e Implementación PMO</p>
+                                    <p class="text-xs text-stone mt-1 font-light">Gobernanza, KPIs y control ejecutivo.</p>
+                                </div>
+                                <div class="p-4 rounded-xl bg-white/[0.03] border border-white/[0.07]">
+                                    <span class="text-champagne font-mono text-xs">01.B</span>
+                                    <p class="text-ivory text-sm font-medium mt-1">Experiencia de Cliente (CX)</p>
+                                    <p class="text-xs text-stone mt-1 font-light">Rediseño omnicanal del Customer Journey.</p>
+                                </div>
+                                <div class="p-4 rounded-xl bg-white/[0.03] border border-white/[0.07]">
+                                    <span class="text-champagne font-mono text-xs">01.C</span>
+                                    <p class="text-ivory text-sm font-medium mt-1">Automatización Aplicada</p>
+                                    <p class="text-xs text-stone mt-1 font-light">Digitalización de procesos core del negocio.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-7 mt-7 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <span class="text-xs text-stone">Ideal para escalar operaciones y asegurar resultados medibles.</span>
+                            <a href="#contacto" data-select-service="Servicios de continuidad y ejecución" class="service-cta inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full bg-champagne text-obsidian font-semibold text-xs uppercase tracking-[0.18em] hover:bg-champagneLight transition-all shrink-0">
+                                <span>Activar este servicio</span>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- PANEL 02: TALENTO Y CULTURA (Oculto por defecto) -->
+                    <div data-service-panel="1" class="service-panel hidden relative z-10 flex flex-col justify-between h-full transition-all duration-500">
+                        <div>
+                            <div class="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-white/10">
+                                <div>
+                                    <span class="text-[11px] font-mono uppercase tracking-[0.2em] text-[#E8B878]">Blueprint 02 · Cohesión Humana</span>
+                                    <h4 class="font-serif text-2xl sm:text-3xl text-ivory mt-1">Talento y Cultura</h4>
+                                </div>
+                                <div class="px-3.5 py-1.5 rounded-xl bg-obsidian/80 border border-amber-500/35 text-right">
+                                    <span class="block text-[10px] uppercase tracking-widest text-stone">Sinergia Equipos</span>
+                                    <span class="font-mono text-lg font-bold text-[#E8B878]">360° <span class="text-xs font-normal text-ivory/70">intergeneracional</span></span>
+                                </div>
+                            </div>
+
+                            <!-- Visualización SVG de Cohesión Cultural -->
+                            <div class="my-7 p-5 rounded-2xl bg-obsidian/70 border border-white/[0.07]">
+                                <svg viewBox="0 0 460 150" class="w-full h-36 overflow-visible">
+                                    <!-- Órbitas de talento -->
+                                    <g transform="translate(95, 75)">
+                                        <circle cx="0" cy="0" r="56" fill="none" stroke="#4B5563" stroke-dasharray="4 4" stroke-width="1.2"/>
+                                        <circle cx="0" cy="0" r="34" fill="none" stroke="#D97724" stroke-opacity="0.6" stroke-width="1.5"/>
+                                        <circle cx="0" cy="0" r="16" fill="#D97724"/>
+                                        <text x="0" y="3.5" text-anchor="middle" fill="#FAF9F6" font-size="8" font-weight="700" font-family="Plus Jakarta Sans, sans-serif">CORE</text>
+                                        <!-- Nodos generacionales -->
+                                        <circle cx="-48" cy="-26" r="9" fill="#E8DCC6"/>
+                                        <circle cx="50" cy="-20" r="9" fill="#D4AF37"/>
+                                        <circle cx="0" cy="56" r="9" fill="#D97724"/>
+                                    </g>
+
+                                    <!-- Tarjeta de pilares culturales -->
+                                    <g transform="translate(185, 18)">
+                                        <rect x="0" y="0" width="260" height="108" rx="12" fill="#231912" stroke="#D97724" stroke-opacity="0.55" stroke-width="1.2"/>
+                                        <rect x="18" y="18" width="76" height="22" rx="11" fill="#D97724"/>
+                                        <text x="56" y="32" text-anchor="middle" fill="#FAF9F6" font-size="9.5" font-weight="600" font-family="Plus Jakarta Sans, sans-serif">Upskilling</text>
+
+                                        <rect x="102" y="18" width="94" height="22" rx="11" fill="#F2ECE1"/>
+                                        <text x="149" y="32" text-anchor="middle" fill="#161920" font-size="9.5" font-weight="600" font-family="Plus Jakarta Sans, sans-serif">Employer Brand</text>
+
+                                        <text x="18" y="64" fill="#FAF9F6" font-size="12" font-weight="600" font-family="Plus Jakarta Sans, sans-serif">Relevo Generacional &amp; Liderazgo</text>
+                                        <text x="18" y="83" fill="#D6C7B2" font-size="10" font-family="Plus Jakarta Sans, sans-serif">Transferencia de conocimiento senior + agilidad digital</text>
+                                    </g>
+                                </svg>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                                <div class="p-4 rounded-xl bg-white/[0.03] border border-white/[0.07]">
+                                    <span class="text-[#E8B878] font-mono text-xs">02.A</span>
+                                    <p class="text-ivory text-sm font-medium mt-1">Relevo Generacional</p>
+                                    <p class="text-xs text-stone mt-1 font-light">Integración fluida de liderazgo y sucesión.</p>
+                                </div>
+                                <div class="p-4 rounded-xl bg-white/[0.03] border border-white/[0.07]">
+                                    <span class="text-[#E8B878] font-mono text-xs">02.B</span>
+                                    <p class="text-ivory text-sm font-medium mt-1">Cultura &amp; Employer Branding</p>
+                                    <p class="text-xs text-stone mt-1 font-light">Propuesta de valor interna para atraer talento.</p>
+                                </div>
+                                <div class="p-4 rounded-xl bg-white/[0.03] border border-white/[0.07]">
+                                    <span class="text-[#E8B878] font-mono text-xs">02.C</span>
+                                    <p class="text-ivory text-sm font-medium mt-1">Upskilling a Medida</p>
+                                    <p class="text-xs text-stone mt-1 font-light">Capacitación ejecutiva orientada a retos reales.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-7 mt-7 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <span class="text-xs text-stone">Ideal para alinear equipos y acelerar la adopción del cambio.</span>
+                            <a href="#contacto" data-select-service="Servicios complementarios al talento y la cultura" class="service-cta inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full bg-champagne text-obsidian font-semibold text-xs uppercase tracking-[0.18em] hover:bg-champagneLight transition-all shrink-0">
+                                <span>Activar este servicio</span>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- PANEL 03: ESTRATÉGICOS Y ECOSISTEMA (Oculto por defecto) -->
+                    <div data-service-panel="2" class="service-panel hidden relative z-10 flex flex-col justify-between h-full transition-all duration-500">
+                        <div>
+                            <div class="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-white/10">
+                                <div>
+                                    <span class="text-[11px] font-mono uppercase tracking-[0.2em] text-champagne">Blueprint 03 · Visión Future-Back</span>
+                                    <h4 class="font-serif text-2xl sm:text-3xl text-ivory mt-1">Estrategia y Ecosistema</h4>
+                                </div>
+                                <div class="px-3.5 py-1.5 rounded-xl bg-obsidian/80 border border-champagne/30 text-right">
+                                    <span class="block text-[10px] uppercase tracking-widest text-stone">Captura de Valor</span>
+                                    <span class="font-mono text-lg font-bold text-champagne">+70% <span class="text-xs font-normal text-ivory/70">nuevas vías</span></span>
+                                </div>
+                            </div>
+
+                            <!-- Visualización SVG de Ecosistema e Innovación -->
+                            <div class="my-7 p-5 rounded-2xl bg-obsidian/70 border border-white/[0.07]">
+                                <svg viewBox="0 0 460 150" class="w-full h-36 overflow-visible">
+                                    <!-- Anillo de Innovación -->
+                                    <g transform="translate(82, 75)">
+                                        <circle cx="0" cy="0" r="46" fill="none" stroke="#2A2E39" stroke-width="12"/>
+                                        <path d="M 0 -46 A 46 46 0 1 1 -43 16" fill="none" stroke="#D4AF37" stroke-width="12" stroke-linecap="round"/>
+                                        <text x="0" y="4" text-anchor="middle" fill="#FAF9F6" font-size="11" font-weight="700" font-family="Plus Jakarta Sans, sans-serif">70%</text>
+                                    </g>
+
+                                    <!-- Red de nodos de ecosistema -->
+                                    <g transform="translate(175, 18)">
+                                        <rect x="0" y="0" width="270" height="108" rx="12" fill="#181B22" stroke="#D4AF37" stroke-opacity="0.4" stroke-width="1.2"/>
+                                        <line x1="36" y1="68" x2="96" y2="38" stroke="#D4AF37" stroke-width="1.5"/>
+                                        <line x1="96" y1="38" x2="168" y2="56" stroke="#9CA3AF" stroke-width="1.5"/>
+                                        <line x1="168" y1="56" x2="232" y2="28" stroke="#D97724" stroke-width="1.5"/>
+                                        <line x1="96" y1="38" x2="142" y2="86" stroke="#6B7280" stroke-width="1.2"/>
+
+                                        <circle cx="36" cy="68" r="7" fill="#6B7280"/>
+                                        <circle cx="96" cy="38" r="11" fill="#D4AF37"/>
+                                        <circle cx="168" cy="56" r="8" fill="#E8DCC6"/>
+                                        <circle cx="232" cy="28" r="9" fill="#D97724"/>
+                                        <circle cx="142" cy="86" r="6" fill="#9CA3AF"/>
+
+                                        <text x="18" y="22" fill="#FAF9F6" font-size="11" font-weight="600" font-family="Plus Jakarta Sans, sans-serif">Alianzas &amp; Innovación Abierta</text>
+                                    </g>
+                                </svg>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div class="p-4 rounded-xl bg-white/[0.03] border border-white/[0.07]">
+                                    <span class="text-champagne font-mono text-xs">03.A</span>
+                                    <p class="text-ivory text-sm font-medium mt-1">Cadena de Valor y Alianzas Estratégicas</p>
+                                    <p class="text-xs text-stone mt-1 font-light">Identificación de partners clave y posicionamiento competitivo en nuevos mercados.</p>
+                                </div>
+                                <div class="p-4 rounded-xl bg-white/[0.03] border border-white/[0.07]">
+                                    <span class="text-champagne font-mono text-xs">03.B</span>
+                                    <p class="text-ivory text-sm font-medium mt-1">Innovación Abierta y Nuevos Modelos</p>
+                                    <p class="text-xs text-stone mt-1 font-light">Co-creación y diseño de nuevos productos o servicios de alto margen.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-7 mt-7 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <span class="text-xs text-stone">Ideal para redefinir el modelo de negocio y abrir nuevas líneas de ingreso.</span>
+                            <a href="#contacto" data-select-service="Servicios estratégicos y de ecosistema" class="service-cta inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full bg-champagne text-obsidian font-semibold text-xs uppercase tracking-[0.18em] hover:bg-champagneLight transition-all shrink-0">
+                                <span>Activar este servicio</span>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== 5. QUIÉNES SOMOS (CON LAS 3 IMÁGENES DEL EQUIPO) ==================== -->
+    <section id="quienes-somos" class="py-24 lg:py-32 border-t border-white/[0.06]">
+        <div class="max-w-7xl mx-auto px-6 lg:px-10">
+
+            <div class="reveal flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+                <div class="max-w-2xl">
+                    <div class="inline-flex items-center gap-2.5 px-3 py-1 rounded-full bg-white/[0.04] border border-white/10 mb-4">
+                        <span class="w-1.5 h-1.5 rounded-full bg-champagne animate-pulse"></span>
+                        <span class="text-[11px] uppercase tracking-[0.25em] text-champagne font-medium">04 / Quiénes somos</span>
+                    </div>
+                    <h2 class="font-serif text-3xl sm:text-5xl font-normal text-ivory">
+                        Un equipo dedicado a <span class="italic font-light text-stone">elevar cada organización</span>
+                    </h2>
+                </div>
+                <p class="text-stone font-light max-w-md text-sm sm:text-base leading-relaxed">
+                    Liderazgo con experiencia académica y empresarial para acompañar procesos de transformación estratégica.
+                </p>
+            </div>
+
+            <!-- Grid de 3 Retratos del Equipo -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <!-- Perfil 1: Jordi Prats -->
+                <a href="https://es.linkedin.com/in/jordi-prats-crumic" target="_blank" rel="noopener noreferrer" class="reveal group relative rounded-2xl overflow-hidden bg-charcoal border border-white/10 hover:border-champagne/50 aspect-[4/3] shadow-2xl transition-all duration-500 hover:-translate-y-1.5">
+                    <img src="1.jpg" alt="Jordi Prats" class="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent"></div>
+                    
+                    <div class="absolute bottom-5 left-6 right-6">
+                        <h3 class="font-sans text-lg font-semibold text-white tracking-tight">Jordi Prats</h3>
+                        <p class="inline-flex items-center gap-1.5 text-sm text-white/85 group-hover:text-champagne transition-colors mt-0.5">
+                            <span>LinkedIn</span>
+                            <svg class="w-3.5 h-3.5 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 17L17 7M17 7H8M17 7v9"></path>
+                            </svg>
+                        </p>
+                    </div>
+                </a>
+
+                <!-- Perfil 2: Maria Júlia Prats -->
+                <a href="https://es.linkedin.com/in/m%C2%AA-julia-prats-5476932" target="_blank" rel="noopener noreferrer" class="reveal group relative rounded-2xl overflow-hidden bg-charcoal border border-white/10 hover:border-champagne/50 aspect-[4/3] shadow-2xl transition-all duration-500 hover:-translate-y-1.5" style="transition-delay: 100ms;">
+                    <img src="2.jpg" alt="Maria Júlia Prats" class="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent"></div>
+                    
+                    <div class="absolute bottom-5 left-6 right-6">
+                        <h3 class="font-sans text-lg font-semibold text-white tracking-tight">Maria Júlia Prats</h3>
+                        <p class="inline-flex items-center gap-1.5 text-sm text-white/85 group-hover:text-champagne transition-colors mt-0.5">
+                            <span>LinkedIn</span>
+                            <svg class="w-3.5 h-3.5 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 17L17 7M17 7H8M17 7v9"></path>
+                            </svg>
+                        </p>
+                    </div>
+                </a>
+
+                <!-- Perfil 3: Alfonso Gironza -->
+                <a href="https://es.linkedin.com/in/alfonsogironzamarqu%C3%A9s" target="_blank" rel="noopener noreferrer" class="reveal group relative rounded-2xl overflow-hidden bg-charcoal border border-white/10 hover:border-champagne/50 aspect-[4/3] shadow-2xl transition-all duration-500 hover:-translate-y-1.5" style="transition-delay: 200ms;">
+                    <img src="3.jpg" alt="Alfonso Gironza" class="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent"></div>
+                    
+                    <div class="absolute bottom-5 left-6 right-6">
+                        <h3 class="font-sans text-lg font-semibold text-white tracking-tight">Alfonso Gironza</h3>
+                        <p class="inline-flex items-center gap-1.5 text-sm text-white/85 group-hover:text-champagne transition-colors mt-0.5">
+                            <span>LinkedIn</span>
+                            <svg class="w-3.5 h-3.5 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 17L17 7M17 7H8M17 7v9"></path>
+                            </svg>
+                        </p>
+                    </div>
+                </a>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ==================== 6. CONTACTO Y FOOTER ==================== -->
+    <section id="contacto" class="py-24 lg:py-32 bg-charcoal/50 border-t border-white/[0.06] relative">
+        <div class="max-w-7xl mx-auto px-6 lg:px-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
+                
+                <!-- Información del Estudio -->
+                <div class="reveal lg:col-span-5 space-y-8">
+                    <div>
+                        <div class="inline-flex items-center gap-2.5 px-3 py-1 rounded-full bg-white/[0.04] border border-white/10 mb-4">
+                        <span class="w-1.5 h-1.5 rounded-full bg-champagne animate-pulse"></span>
+                        <span class="text-[11px] uppercase tracking-[0.25em] text-champagne font-medium">05 / Contacto</span>
+                    </div>
+                        <h2 class="font-serif text-3xl sm:text-5xl font-normal text-ivory leading-tight">
+                            Demos forma a su próximo <span class="italic font-light text-stone">proyecto</span>.
+                        </h2>
+                    </div>
+
+                    <p class="text-stone font-light text-sm sm:text-base leading-relaxed">
+                        Aceptamos un número limitado de proyectos anuales para garantizar la dedicación personal de nuestros socios fundadores en cada etapa.
+                    </p>
+
+                    <div class="space-y-4 pt-4 border-t border-white/10 text-sm">
+                        <div>
+                            <p class="text-xs uppercase tracking-widest text-stone">Contacto Directo</p>
+                            <p class="text-champagne mt-1">crumic@crumic.com  +34 616 51 20 58  +34 633 19 68 44</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Formulario con Validación en Tiempo Real -->
+                <div class="reveal lg:col-span-7">
+                    <form id="contact-form" novalidate class="p-8 sm:p-10 rounded-2xl bg-obsidian border border-white/10 shadow-2xl space-y-6">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <!-- Campo Nombre -->
+                            <div>
+                                <label for="name" class="block text-xs uppercase tracking-widest text-stone mb-2">Nombre Completo *</label>
+                                <input type="text" id="name" name="name" placeholder="Ej. Sofía Mendoza" required
+                                    class="w-full px-4 py-3.5 rounded-xl bg-charcoal border border-white/10 text-ivory placeholder-stone/40 text-sm focus:outline-none focus:border-champagne transition-colors">
+                                <p id="error-name" class="text-xs text-red-400 mt-1.5 hidden">Por favor, introduzca su nombre (mínimo 3 caracteres).</p>
+                            </div>
+
+                            <!-- Campo Email -->
+                            <div>
+                                <label for="email" class="block text-xs uppercase tracking-widest text-stone mb-2">Correo Electrónico *</label>
+                                <input type="email" id="email" name="email" placeholder="sofia@dominio.com" required
+                                    class="w-full px-4 py-3.5 rounded-xl bg-charcoal border border-white/10 text-ivory placeholder-stone/40 text-sm focus:outline-none focus:border-champagne transition-colors">
+                                <p id="error-email" class="text-xs text-red-400 mt-1.5 hidden">Introduzca una dirección de correo válida.</p>
+                            </div>
+                        </div>
+
+                        <!-- Campo Tipo de Proyecto -->
+                        <div>
+                            <label for="service" class="block text-xs uppercase tracking-widest text-stone mb-2">Naturaleza del Proyecto</label>
+                            <select id="service" name="service"
+                                class="w-full px-4 py-3.5 rounded-xl bg-charcoal border border-white/10 text-ivory text-sm focus:outline-none focus:border-champagne transition-colors">
+                                <option value="Servicios de continuidad y ejecución">Servicios de continuidad y ejecución</option>
+                                <option value="Servicios complementarios al talento y la cultura">Servicios complementarios al talento y la cultura</option>
+                                <option value="Servicios estratégicos y de ecosistema">Servicios estratégicos y de ecosistema</option>
+                                <option value="Propuesta integral">Propuesta integral</option>
+                            </select>
+                        </div>
+
+                        <!-- Campo Mensaje -->
+                        <div>
+                            <label for="message" class="block text-xs uppercase tracking-widest text-stone mb-2">Detalles del Proyecto *</label>
+                            <textarea id="message" name="message" rows="4" placeholder="Cuéntenos brevemente sobre su organización, objetivos a lograr o visión del proyecto..." required
+                                class="w-full px-4 py-3.5 rounded-xl bg-charcoal border border-white/10 text-ivory placeholder-stone/40 text-sm focus:outline-none focus:border-champagne transition-colors resize-none"></textarea>
+                            <p id="error-message" class="text-xs text-red-400 mt-1.5 hidden">Por favor, comparta algunos detalles sobre su proyecto (mínimo 15 caracteres).</p>
+                        </div>
+
+                        <button type="submit" class="w-full py-4 rounded-full bg-champagne text-obsidian font-semibold text-xs uppercase tracking-[0.2em] hover:bg-champagneLight transition-all duration-300 shadow-lg">
+                            Solicitar entrevista
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Minimalista -->
+    <footer class="py-12 border-t border-white/[0.06] bg-obsidian text-xs text-stone">
+        <div class="max-w-7xl mx-auto px-6 lg:px-10 flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div class="font-serif tracking-[0.2em] text-ivory">
+                CRU<span class="text-champagne">MIC</span>
+            </div>
+            <p class="font-light text-center">
+                &copy; 2026 CRUMIC Consulting SLP Todos los derechos reservados.
+            </p>
+            <div class="flex space-x-6 uppercase tracking-widest">
+                <a href="https://www.instagram.com/crumic_/" class="hover:text-champagne transition-colors">Instagram</a>
+                <a href="https://www.crumic.com/" class="hover:text-champagne transition-colors">Crumic Consulting</a>
+                <a href="https://www.linkedin.com/company/crumic" class="hover:text-champagne transition-colors">LinkedIn</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==================== NOTIFICACIÓN TOAST DE ENVÍO EXITOSO ==================== -->
+    <div id="toast-notification" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-500 pointer-events-none">
+        <div class="flex items-center space-x-4 px-6 py-4 rounded-2xl bg-charcoal border border-champagne/50 shadow-[0_10px_40px_rgba(0,0,0,0.6)]">
+            <div class="w-8 h-8 rounded-full bg-champagne/20 text-champagne flex items-center justify-center shrink-0">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+            </div>
+            <div>
+                <p class="text-sm font-medium text-ivory">Solicitud recibida con éxito</p>
+                <p class="text-xs text-stone mt-0.5">Un socio del estudio le contactará en menos de 24h.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== JAVASCRIPT MODERNO ==================== -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // 1. MENÚ MÓVIL RESPONSIVE
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const iconOpen = document.getElementById('menu-icon-open');
+            const iconClose = document.getElementById('menu-icon-close');
+
+            function toggleMobileMenu() {
+                const isHidden = mobileMenu.classList.contains('hidden');
+                mobileMenu.classList.toggle('hidden');
+                iconOpen.classList.toggle('hidden', isHidden);
+                iconClose.classList.toggle('hidden', !isHidden);
+            }
+
+            mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+            document.querySelectorAll('.mobile-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (!mobileMenu.classList.contains('hidden')) toggleMobileMenu();
+                });
+            });
+
+            // 2. ANIMACIÓN SUTIL AL HACER SCROLL (Intersection Observer)
+            const revealElements = document.querySelectorAll('.reveal');
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        revealObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.12 });
+
+            revealElements.forEach(el => revealObserver.observe(el));
+
+            // 3. INTERACTIVIDAD DE ETAPAS EN LA SECCIÓN ENFOQUE
+            const enfoqueTabs = document.querySelectorAll('.enfoque-tab');
+            const enfoqueCards = document.querySelectorAll('.enfoque-card');
+
+            function activateEnfoqueStep(index) {
+                enfoqueTabs.forEach((tab, i) => {
+                    const isActive = i === index;
+                    tab.classList.toggle('border-champagne/60', isActive);
+                    tab.classList.toggle('bg-charcoal/90', isActive);
+                    tab.classList.toggle('border-white/10', !isActive);
+                    tab.classList.toggle('bg-charcoal/40', !isActive);
+                });
+
+                enfoqueCards.forEach((card, i) => {
+                    const isActive = i === index;
+                    card.classList.toggle('border-champagne/60', isActive);
+                    card.classList.toggle('-translate-y-1.5', isActive);
+                });
+            }
+
+            const enfoqueSvgSteps = document.querySelectorAll('.enfoque-svg-step');
+            const enfoqueSvgDots = document.querySelectorAll('.enfoque-svg-dot');
+            const enfoqueSvgBoxes = document.querySelectorAll('.enfoque-svg-box');
+
+            function syncSvgDots(index) {
+                enfoqueSvgDots.forEach((dot, i) => {
+                    const isActive = i === index;
+                    dot.setAttribute('fill', isActive ? '#D4AF37' : '#B87049');
+                    dot.setAttribute('r', isActive ? '17' : '15');
+                });
+
+                enfoqueSvgBoxes.forEach((box, i) => {
+                    const isActive = i === index;
+                    box.setAttribute('stroke', isActive ? '#D4AF37' : '#FFFFFF');
+                    box.setAttribute('stroke-opacity', isActive ? '0.75' : '0.14');
+                });
+            }
+
+            const origActivate = activateEnfoqueStep;
+            activateEnfoqueStep = function(index) {
+                origActivate(index);
+                syncSvgDots(index);
+            };
+
+            enfoqueTabs.forEach((tab, idx) => {
+                tab.addEventListener('click', () => activateEnfoqueStep(idx));
+            });
+
+            enfoqueCards.forEach((card, idx) => {
+                card.addEventListener('click', () => activateEnfoqueStep(idx));
+            });
+
+            enfoqueSvgSteps.forEach((el) => {
+                el.addEventListener('click', () => {
+                    const idx = parseInt(el.getAttribute('data-step'), 10);
+                    activateEnfoqueStep(idx);
+                });
+            });
+
+            syncSvgDots(0);
+
+            // 3B. PRESELECCIÓN DE NATURALEZA DEL PROYECTO DESDE TARJETAS DE PROPUESTA
+            const serviceSelect = document.getElementById('service');
+            document.querySelectorAll('.propuesta-card[data-propuesta-service]').forEach(card => {
+                card.addEventListener('click', () => {
+                    const selectedService = card.getAttribute('data-propuesta-service');
+                    if (serviceSelect && selectedService) {
+                        serviceSelect.value = selectedService;
+                    }
+                });
+            });
+
+            // 4. VALIDACIÓN EN TIEMPO REAL DEL FORMULARIO Y NOTIFICACIÓN TOAST
+            const form = document.getElementById('contact-form');
+            const nameInput = document.getElementById('name');
+            const emailInput = document.getElementById('email');
+            const messageInput = document.getElementById('message');
+            const toast = document.getElementById('toast-notification');
+
+            const validators = {
+                name: (val) => val.trim().length >= 3,
+                email: (val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val.trim()),
+                message: (val) => val.trim().length >= 15
+            };
+
+            function validateField(input, errorId, validatorFn) {
+                const errorEl = document.getElementById(errorId);
+                const isValid = validatorFn(input.value);
+                
+                if (!isValid) {
+                    input.classList.add('border-red-400/70');
+                    input.classList.remove('border-white/10', 'border-champagne');
+                    errorEl.classList.remove('hidden');
+                } else {
+                    input.classList.remove('border-red-400/70');
+                    input.classList.add('border-champagne/60');
+                    errorEl.classList.add('hidden');
+                }
+                return isValid;
+            }
+
+            nameInput.addEventListener('input', () => validateField(nameInput, 'error-name', validators.name));
+            emailInput.addEventListener('input', () => validateField(emailInput, 'error-email', validators.email));
+            messageInput.addEventListener('input', () => validateField(messageInput, 'error-message', validators.message));
+
+            function showToast() {
+                toast.classList.remove('translate-y-24', 'opacity-0');
+                setTimeout(() => {
+                    toast.classList.add('translate-y-24', 'opacity-0');
+                }, 4500);
+            }
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const isNameValid = validateField(nameInput, 'error-name', validators.name);
+                const isEmailValid = validateField(emailInput, 'error-email', validators.email);
+                const isMessageValid = validateField(messageInput, 'error-message', validators.message);
+
+                if (isNameValid && isEmailValid && isMessageValid) {
+                    form.reset();
+                    [nameInput, emailInput, messageInput].forEach(inp => {
+                        inp.classList.remove('border-champagne/60');
+                        inp.classList.add('border-white/10');
+                    });
+                    showToast();
+                }
+            });
+
+            // 5. CONSOLA INTERACTIVA DE SERVICIOS + CONEXIÓN CON FORMULARIO
+            const serviceTriggers = document.querySelectorAll('.service-trigger');
+            const servicePanels = document.querySelectorAll('.service-panel');
+            const serviciosGlow = document.getElementById('servicios-glow');
+            const glowColors = [
+                'rgba(212, 175, 55, 0.07)', // Champagne
+                'rgba(217, 119, 36, 0.09)', // Ámbar cálido
+                'rgba(232, 208, 130, 0.07)' // Oro claro
+            ];
+
+            function activateServicePanel(index) {
+                serviceTriggers.forEach((btn, i) => {
+                    const isActive = i === index;
+                    const bar = btn.querySelector('.service-progress-bar');
+
+                    btn.classList.toggle('active', isActive);
+                    btn.classList.toggle('border-champagne/60', isActive);
+                    btn.classList.toggle('bg-gradient-to-r', isActive);
+                    btn.classList.toggle('from-charcoal', isActive);
+                    btn.classList.toggle('to-[#13151A]', isActive);
+                    btn.classList.toggle('shadow-xl', isActive);
+
+                    btn.classList.toggle('border-white/10', !isActive);
+                    btn.classList.toggle('bg-charcoal/35', !isActive);
+
+                    if (bar) {
+                        bar.classList.toggle('bg-champagne', isActive);
+                        bar.classList.toggle('bg-transparent', !isActive);
+                    }
+                });
+
+                servicePanels.forEach((panel, i) => {
+                    panel.classList.toggle('hidden', i !== index);
+                });
+
+                if (serviciosGlow && glowColors[index]) {
+                    serviciosGlow.style.backgroundColor = glowColors[index];
+                }
+            }
+
+            serviceTriggers.forEach((btn) => {
+                btn.addEventListener('click', () => {
+                    const idx = parseInt(btn.getAttribute('data-service-idx'), 10);
+                    activateServicePanel(idx);
+                });
+            });
+
+            // Conectar botón "Activar este servicio" con el select del formulario de contacto
+            document.querySelectorAll('.service-cta[data-select-service]').forEach((cta) => {
+                cta.addEventListener('click', () => {
+                    const targetService = cta.getAttribute('data-select-service');
+                    if (serviceSelect && targetService) {
+                        serviceSelect.value = targetService;
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
